@@ -3,7 +3,6 @@ from core.database import get_connection
 from datetime import date
 from typing import Optional
 
-
 class UserModel:
     """
     Classe de acesso direto à tabela `users` no MySQL.

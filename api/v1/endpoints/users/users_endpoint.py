@@ -1,11 +1,10 @@
 # endpoints/users_endpoint.py
-
 from typing import List
 from fastapi import APIRouter, status, Depends, HTTPException, Response, Query
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import JSONResponse
 
-# Schemas para entrada e çaída de dados (nomes padronizados em inglês)
+# Schemas para entrada e saída de dados (nomes padronizados em inglês)
 from api.v1.schemas.users.users_schema import (
     UserSchemaBase,
     UserSchemaCreate,
@@ -35,7 +34,6 @@ router = APIRouter()
 
 
 # ---------------------- ROTAS FIXAS ----------------------
-
 @router.get('/logado', response_model=UserSchemaBase)
 def get_logged_user(current_user: dict = Depends(get_current_user)):
     """
