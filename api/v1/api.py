@@ -1,7 +1,8 @@
-from fastapi import APIRouter  # Importa o gerenciador de rotas do FastAPI
+# Importa o gerenciador de rotas do FastAPI
+from fastapi import APIRouter
 
 # Importa os módulos de rotas específicos
-from api.v1.endpoints.users import users_endpoint
+from api.v1.packages.users.endpoints.users import users_endpoint
 from api.v1.packages.companies.endpoints import companies_endpoint
 
 # Cria uma instância do APIRouter que vai agregar todas as rotas da API
@@ -12,7 +13,7 @@ api_router.include_router(
     users_endpoint.router, prefix='/users', tags=['Usuários']
 )
 
-# Inclui as rotas de "c_caixa_item no roteador principal, com prefixo /c_caixa_items e tag 'Empresas'
+# Inclui as rotas de empresa
 api_router.include_router(
     companies_endpoint.router, prefix='/companies', tags=['Empresas']
 )

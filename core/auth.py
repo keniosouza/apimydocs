@@ -5,7 +5,6 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 
 from core.configs import settings
-from api.v1.controllers.users.users_controller import authenticate_user
 
 # Define o esquema OAuth2 para login
 oauth2_schema = OAuth2PasswordBearer(

@@ -1,11 +1,10 @@
 # endpoints/users_endpoint.py
-from typing import List
 from fastapi import APIRouter, status, Depends, HTTPException, Response, Query
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import JSONResponse
 
 # Schemas para entrada e saída de dados (nomes padronizados em inglês)
-from api.v1.schemas.users.users_schema import (
+from api.v1.packages.users.schemas.users.users_schema import (
     UserSchemaBase,
     UserSchemaCreate,
     UserSchemaUpdate,
@@ -13,14 +12,13 @@ from api.v1.schemas.users.users_schema import (
 )
 
 # Controller responsável pelas regras de negócio e sanitização
-from api.v1.controllers.users.users_controller import (
+from api.v1.packages.users.controllers.users.users_controller import (
     authenticate_user,
     create_user,
     get_all,
     get_user_by_id,
     update_user,
-    delete_user,
-    count_users
+    delete_user
 )
 
 # Dependência para obter o usuário autenticado a partir do token JWT

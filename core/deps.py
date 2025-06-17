@@ -4,7 +4,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from core.configs import settings
-from api.v1.models.users.users_model import UserModel # <--- Importe o UserModel
+from api.v1.packages.users.models.users.users_model import UserModel # <--- Importe o UserModel
 
 # Define o esquema de segurança OAuth2 (token tipo Bearer)
 oauth2_schema = OAuth2PasswordBearer(

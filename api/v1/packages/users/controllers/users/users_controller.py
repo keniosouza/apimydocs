@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 from typing import Optional
 
-from api.v1.schemas.users.users_schema import (
+from api.v1.packages.users.schemas.users.users_schema import (
     UserSchemaBase,
     UserSchemaCreate,
     UserSchemaUpdate,
@@ -9,7 +9,7 @@ from api.v1.schemas.users.users_schema import (
     UserPaginationSchema
 )
 
-from api.v1.models.users.users_model import UserModel
+from api.v1.packages.users.models.users.users_model import UserModel
 from core.security import verify_senha_api, hash_senha_api
 from core.validation import InputSanitizer
 

@@ -1,16 +1,13 @@
-from typing import List
 from fastapi import APIRouter, status, Depends, HTTPException, Query
-from fastapi.responses import JSONResponse
 
 # Schemas para entrada e saída de dados
-from api.v1.schemas.companies.companies_schema import (
+from api.v1.packages.users.schemas.companies.companies_schema import (
     CompanySchemaBase,
-    CompanySchemaList,
     CompanyPaginationSchema
 )
 
 # Controller com as regras de negócio para companies
-from api.v1.controllers.companies.companies_controller import (
+from api.v1.packages.users.controllers.companies.companies_controller import (
     get_all_companies,
     get_company_by_id,
     count_companies
