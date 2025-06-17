@@ -1,7 +1,15 @@
 # Importação de bibliotecas
 from api.v1.packages.companies.repositories.show_company import ShowCompany
 
-# Classe responsável por lista todos os registros
+"""
+Busca uma empresa especifíca no sistema
+
+Args:
+    company_id (int): Id da empresa que deve ser bsucada.
+
+Returns:
+   List[Dict[str, str]]: Lista de dicionários com os dados das empresas.
+"""
 class ShowCompanyAction:
 
     # Método padrão de execução

@@ -1,4 +1,3 @@
-import pymysql
 from core.database import get_connection
 from datetime import date
 from typing import Optional

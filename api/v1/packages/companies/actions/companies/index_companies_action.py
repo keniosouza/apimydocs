@@ -1,14 +1,21 @@
 # Importação de bibliotecas
 from api.v1.packages.companies.repositories.index_companies import IndexCompanies
 
-# Classe responsável por lista todos os registros
+"""
+Lista as empresas cadastradas no sistema
+
+Args:
+
+Returns:
+   List[Dict[str, str]]: Lista de dicionários com os dados das empresas.
+"""
 class IndexCompaniesAction:
 
     # Método padrão de execução
     def execute(self):
 
-        # Instânciamento do repositório
-        indexCompanies = IndexCompanies
+        # Instância o repositório
+        indexCompanies = IndexCompanies()
 
-        # BUsca dos dados
+        # Busca dos dados
         return indexCompanies.execute()

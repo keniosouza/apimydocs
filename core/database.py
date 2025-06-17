@@ -1,6 +1,5 @@
-import os
-from urllib.parse import urlparse, unquote
 import pymysql
+from urllib.parse import urlparse, unquote
 from core.configs import settings
 
 def get_connection():

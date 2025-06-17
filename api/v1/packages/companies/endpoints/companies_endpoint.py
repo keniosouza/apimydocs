@@ -1,5 +1,5 @@
 # Importação de bibliotecas
-from fastapi import APIRouter, status, Depends, HTTPException, Query
+from fastapi import APIRouter, status, Depends
 
 # Controller com as regras de negócio para companies
 from api.v1.packages.companies.controllers.companies_controller import CompaniesController
@@ -11,13 +11,13 @@ from core.deps import get_current_user
 # Inicializa o roteador para rotas de companies
 router = APIRouter()
 
+# Instânciamento do controller desejado
+companiesController = CompaniesController()
+
 @router.post('/', status_code=status.HTTP_200_OK)
 async def create(company : CompanySchemaBase, current_user: dict = Depends(get_current_user)):
 
     """ Lista todas as companies com paginação. """
-    # Instânciamento do controller desejado
-    companiesController = CompaniesController()
-
     # Busca as empresas cadastradas
     companies = companiesController.create(company)
 
@@ -28,9 +28,6 @@ async def create(company : CompanySchemaBase, current_user: dict = Depends(get_c
 async def index(current_user: dict = Depends(get_current_user)):
 
     """ Lista todas as companies com paginação. """
-    # Instânciamento do controller desejado
-    companiesController = CompaniesController()
-
     # Busca as empresas cadastradas
     companies = companiesController.index()
 
@@ -41,9 +38,6 @@ async def index(current_user: dict = Depends(get_current_user)):
 async def show(company_id : int, current_user: dict = Depends(get_current_user)):
 
     """ Lista a empresa solicitada por id """
-    # Instânciamento de controller desejado
-    companiesController = CompaniesController()
-
     # Busca a empresa cadastrada
     company = companiesController.show(company_id)
 
@@ -54,9 +48,6 @@ async def show(company_id : int, current_user: dict = Depends(get_current_user))
 async def delete(company_id : int, current_user: dict = Depends(get_current_user)):
 
     """ Lista a empresa solicitada por id """
-    # Instânciamento de controller desejado
-    companiesController = CompaniesController()
-
     # Busca a empresa cadastrada
     company = companiesController.delete(company_id)
 

@@ -1,28 +1,17 @@
-from core.database import get_connection  # Conexão com MySQL via PyMySQL
+# Importação de bibliotecas
+from core.database import get_connection
 
+""" Repoistório para buscar todas as empresas """
 class IndexCompanies:
-    """
-    Classe de acesso direto à tabela `companies`.
-    Não deve conter validações ou lógica de negócio.
-    """
-    @staticmethod
-    def execute():
-        """
-        Retorna lista paginada de empresas.
-        """
-        conn = None
-        cur = None
-        try:
-            conn = get_connection()
-            cur = conn.cursor()
 
-            cur.execute("""
-                SELECT * FROM companies
-            """)
+    # Inicializa a class realizando a conexão com o banco de dados
+    def __init__(self):
+        self.cursor = get_connection().cursor()
 
-            return [dict(row) for row in cur.fetchall()]
-        except Exception as e:
-            raise RuntimeError(f"Erro ao listar empresas: {e}")
-        finally:
-            if cur: cur.close()
-            if conn: conn.close()
+    # Executa a ação em si
+    def execute(self):
+
+        # Realiza a busca de todos os registros
+        self.cursor.execute(""" SELECT * FROM companies """)
+
+        return [dict(row) for row in self.cursor.fetchall()]

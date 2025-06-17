@@ -2,7 +2,7 @@
 from api.v1.packages.companies.repositories.create_company import CreateCompany
 from api.v1.packages.companies.schemas.companies_schema import CompanySchemaBase
 
-# Classe responsável por lista todos os registros
+# Classe reponsável por cadastrar uma nova empresa
 class CreateCompanyAction:
 
     # Método padrão de execução
@@ -11,5 +11,5 @@ class CreateCompanyAction:
         # Instânciamento do repositório
         createCompany = CreateCompany()
 
-        # BUsca dos dados
+        # Busca os dos dados
         return createCompany.execute(company)

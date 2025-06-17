@@ -9,6 +9,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Importa a classe principal do FastAPI
 from fastapi import FastAPI
+from api.v1.packages.system.handlers import register_exception_handlers
 
 # Importa o middleware de CORS
 from fastapi.middleware.cors import CORSMiddleware
@@ -21,6 +22,8 @@ from api.v1.api import api_router
 
 # Instancia o app FastAPI com um título personalizado
 app = FastAPI(title='API Mydocs')
+
+register_exception_handlers(app)
 
 # Adiciona o middleware de CORS
 app.add_middleware(

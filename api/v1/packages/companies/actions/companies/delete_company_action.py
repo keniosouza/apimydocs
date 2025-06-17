@@ -1,7 +1,7 @@
 # Importação de bibliotecas
 from api.v1.packages.companies.repositories.delete_company import DeleteCompany
 
-# Classe responsável por lista todos os registros
+# Classe reponsável por remover uma empresa
 class DeleteCompanyAction:
 
     # Método padrão de execução
