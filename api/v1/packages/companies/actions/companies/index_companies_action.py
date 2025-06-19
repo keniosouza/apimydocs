@@ -1,19 +1,20 @@
 # Importação de bibliotecas
 from api.v1.packages.companies.repositories.index_companies import IndexCompanies
+from core.base.base_action import BaseAction
 
-"""
-Lista as empresas cadastradas no sistema
 
-Args:
+class IndexCompaniesAction(BaseAction):
+    """
+    Lista as empresas cadastradas no sistema
 
-Returns:
-   List[Dict[str, str]]: Lista de dicionários com os dados das empresas.
-"""
-class IndexCompaniesAction:
+    Args:
+
+    Returns:
+       List[Dict[str, str]]: Lista de dicionários com os dados das empresas.
+    """
 
     # Método padrão de execução
     def execute(self):
-
         # Instância o repositório
         indexCompanies = IndexCompanies()
 

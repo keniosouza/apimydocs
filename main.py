@@ -9,7 +9,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Importa a classe principal do FastAPI
 from fastapi import FastAPI
-from api.v1.packages.system.handlers import register_exception_handlers
+from core.system.handlers import register_exception_handlers
 
 # Importa o middleware de CORS
 from fastapi.middleware.cors import CORSMiddleware

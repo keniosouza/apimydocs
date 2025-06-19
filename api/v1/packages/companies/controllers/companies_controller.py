@@ -1,42 +1,32 @@
 # Importação de bibliotecas
-from api.v1.packages.companies.services.companies_service import CompaniesService
+from core.utils.dynamic_import import DynamicImport
 from api.v1.packages.companies.schemas.companies_schema import CompanySchemaBase
+
 
 # Classe de companies
 class CompaniesController:
+    def __init__(self):
+        # Importa a classe desejada
+        CompaniesService = DynamicImport.service("companies", "CompaniesService")
+        # Instânciamento de classe Service
+        self.companiesService = CompaniesService()
 
     # Cria uma nova empresa
-    def create(self, company : CompanySchemaBase):
-
-        # Instânciamento de classe Service
-        companiesService = CompaniesService()
-
+    def create(self, company: CompanySchemaBase):
         # Retorno da informação desejada
-        return companiesService.create(company)
+        return self.companiesService.create(company)
 
     # Lista todas as empresas
     def index(self):
-
-        # Instânciamento de classe Service
-        companiesService = CompaniesService()
-
-        # Retorno da informação desejada
-        return companiesService.index()
+        # Usa normalmente
+        return self.companiesService.index()
 
     # Busca uma empresa especifíca
-    def show(self, company_id : int):
-
-        # Instânciamento de classe Service
-        companiesService = CompaniesService()
-
+    def show(self, company_id: int):
         # Retorno da informação desejada
-        return companiesService.show(company_id)
+        return self.companiesService.show(company_id)
 
     # Remove uma empresa
     def delete(self, company_id: int):
-
-        # Instânciamento de classe Service
-        companiesService = CompaniesService()
-
         # Retorno da informação desejada
-        return companiesService.delete(company_id)
+        return self.companiesService.delete(company_id)

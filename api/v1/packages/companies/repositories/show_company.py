@@ -1,30 +1,22 @@
 # Importação de bibliotecas
-from core.database import get_connection  # Conexão com MySQL via PyMySQL
+from core.base.base_repository import BaseRepository
 
-"""
-Classe de acesso direto à tabela `companies`.
-Não deve conter validações ou lógica de negócio.
-"""
-class ShowCompany:
 
-    @staticmethod
-    def execute(company_id : int):
-        """
-        Retorna a empresa solicitada
-        """
-        conn = None
-        cur = None
-        try:
-            conn = get_connection()
-            cur = conn.cursor()
+class ShowCompany(BaseRepository):
+    """
+    Classe de acesso direto à tabela `companies`.
+    Não deve conter validações ou lógica de negócio.
+    """
 
-            cur.execute("""
-                        SELECT * FROM companies c where c.company_id = %s
-                    """, (company_id,))
+    def execute(self, company_id: int):
+        # Realiza a busca do registro desejado
+        self.cursor.execute(
+            """SELECT * FROM companies c where c.company_id = %s""",
+            (company_id,),
+        )
 
-            return [dict(row) for row in cur.fetchall()]
-        except Exception as e:
-            raise RuntimeError(f"Erro ao listar empresas: {e}")
-        finally:
-            if cur: cur.close()
-            if conn: conn.close()
+        # Realiza o commit da transação
+        self.commit()
+
+        # Retorno da informação desejado
+        return [dict(row) for row in self.cursor.fetchall()]

@@ -1,17 +1,21 @@
 # Importação de bibliotecas
-from core.database import get_connection
+from core.base.base_repository import BaseRepository
 
-""" Repoistório para buscar todas as empresas """
-class IndexCompanies:
 
-    # Inicializa a class realizando a conexão com o banco de dados
-    def __init__(self):
-        self.cursor = get_connection().cursor()
+class IndexCompanies(BaseRepository):
+    """
+    Classe de acesso direto à tabela `companies`.
+    Não deve conter validações ou lógica de negócio.
+    """
 
     # Executa a ação em si
     def execute(self):
-
         # Realiza a busca de todos os registros
-        self.cursor.execute(""" SELECT * FROM companies """)
+        self.cursor.execute(""" SELECT *
+                                FROM companies """)
 
+        # Realiza o commit da transação
+        self.commit()
+
+        # Retorno da informação desejada
         return [dict(row) for row in self.cursor.fetchall()]

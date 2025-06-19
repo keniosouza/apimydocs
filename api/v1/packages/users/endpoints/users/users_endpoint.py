@@ -8,7 +8,7 @@ from api.v1.packages.users.schemas.users.users_schema import (
     UserSchemaBase,
     UserSchemaCreate,
     UserSchemaUpdate,
-    UserPaginationSchema
+    UserPaginationSchema,
 )
 
 # Controller responsável pelas regras de negócio e sanitização
@@ -18,7 +18,7 @@ from api.v1.packages.users.controllers.users.users_controller import (
     get_all,
     get_user_by_id,
     update_user,
-    delete_user
+    delete_user,
 )
 
 # Dependência para obter o usuário autenticado a partir do token JWT
@@ -32,7 +32,7 @@ router = APIRouter()
 
 
 # ---------------------- ROTAS FIXAS ----------------------
-@router.get('/logado', response_model=UserSchemaBase)
+@router.get("/logado", response_model=UserSchemaBase)
 def get_logged_user(current_user: dict = Depends(get_current_user)):
     """
     Retorna os dados do usuário autenticado com o token atual.
@@ -40,7 +40,9 @@ def get_logged_user(current_user: dict = Depends(get_current_user)):
     return current_user
 
 
-@router.post('/signup', status_code=status.HTTP_201_CREATED, response_model=UserSchemaBase)
+@router.post(
+    "/signup", status_code=status.HTTP_201_CREATED, response_model=UserSchemaBase
+)
 def post_user(user: UserSchemaCreate):
     """
     Cria um novo usuário após validações e sanitizações.
@@ -49,44 +51,50 @@ def post_user(user: UserSchemaCreate):
     if not new_user:
         raise HTTPException(
             status_code=status.HTTP_406_NOT_ACCEPTABLE,
-            detail='E-mail is already registered.'
+            detail="E-mail is already registered.",
         )
     return new_user
 
 
-@router.post('/login')
+@router.post("/login")
 def login(form_data: OAuth2PasswordRequestForm = Depends()):
     """
     Realiza login com e-mail e senha, retornando um token JWT válido.
     """
     user = authenticate_user(
         email=form_data.username,
-        password=form_data.password  # Corrigido: senha_api -> password
+        password=form_data.password,  # Corrigido: senha_api -> password
     )
 
     if not user:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail='Invalid login credentials.'
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid login credentials."
         )
 
-    return JSONResponse(content={
-        "access_token": create_access_token(sub=user["user_id"]),
-        "token_type": "bearer",
-    })
+    return JSONResponse(
+        content={
+            "access_token": create_access_token(sub=user["user_id"]),
+            "token_type": "bearer",
+        }
+    )
 
 
 # ---------------------- ROTAS DINÂMICAS ----------------------
 
-@router.get('/', response_model=UserPaginationSchema)
-def get_users(skip: int = Query(0, ge=0), limit: int = Query(10, ge=1), current_user: dict = Depends(get_current_user)):
+
+@router.get("/", response_model=UserPaginationSchema)
+def get_users(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(10, ge=1),
+    current_user: dict = Depends(get_current_user),
+):
     """
     Retorna todos os usuários cadastrados no sistema com paginação.
     """
     return get_all(skip=skip, limit=limit)
 
 
-@router.get('/{user_id}', response_model=UserSchemaBase, status_code=status.HTTP_200_OK)
+@router.get("/{user_id}", response_model=UserSchemaBase, status_code=status.HTTP_200_OK)
 def get_user(user_id: int, current_user: dict = Depends(get_current_user)):
     """
     Retorna os dados de um usuário específico pelo ID.
@@ -95,14 +103,15 @@ def get_user(user_id: int, current_user: dict = Depends(get_current_user)):
     if user:
         return user
 
-    raise HTTPException(
-        detail='User not found.',
-        status_code=status.HTTP_404_NOT_FOUND
-    )
+    raise HTTPException(detail="User not found.", status_code=status.HTTP_404_NOT_FOUND)
 
 
-@router.put('/{user_id}', response_model=UserSchemaBase, status_code=status.HTTP_202_ACCEPTED)
-def put_user(user_id: int, user: UserSchemaUpdate, current_user: dict = Depends(get_current_user)):
+@router.put(
+    "/{user_id}", response_model=UserSchemaBase, status_code=status.HTTP_202_ACCEPTED
+)
+def put_user(
+    user_id: int, user: UserSchemaUpdate, current_user: dict = Depends(get_current_user)
+):
     """
     Atualiza os dados de um usuário específico com os campos fornecidos.
     """
@@ -110,13 +119,10 @@ def put_user(user_id: int, user: UserSchemaUpdate, current_user: dict = Depends(
     if updated_user:
         return updated_user
 
-    raise HTTPException(
-        detail='User not found.',
-        status_code=status.HTTP_404_NOT_FOUND
-    )
+    raise HTTPException(detail="User not found.", status_code=status.HTTP_404_NOT_FOUND)
 
 
-@router.delete('/{user_id}', status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_user_by_id(user_id: int, current_user: dict = Depends(get_current_user)):
     """
     Exclui um usuário com base no ID fornecido.
@@ -125,7 +131,4 @@ def delete_user_by_id(user_id: int, current_user: dict = Depends(get_current_use
     if success:
         return Response(status_code=status.HTTP_204_NO_CONTENT)
 
-    raise HTTPException(
-        detail='User not found.',
-        status_code=status.HTTP_404_NOT_FOUND
-    )
+    raise HTTPException(detail="User not found.", status_code=status.HTTP_404_NOT_FOUND)

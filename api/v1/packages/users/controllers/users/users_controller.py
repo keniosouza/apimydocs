@@ -6,7 +6,7 @@ from api.v1.packages.users.schemas.users.users_schema import (
     UserSchemaCreate,
     UserSchemaUpdate,
     UserSchemaList,
-    UserPaginationSchema
+    UserPaginationSchema,
 )
 
 from api.v1.packages.users.models.users.users_model import UserModel
@@ -25,7 +25,7 @@ def authenticate_user(email: str, password: str) -> Optional[dict]:
     except RuntimeError as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erro interno ao autenticar: {e}"
+            detail=f"Erro interno ao autenticar: {e}",
         )
 
 
@@ -58,7 +58,7 @@ def create_user(user_data: UserSchemaCreate) -> UserSchemaBase:
             pis=user_data.pis,
             date_birth=user_data.date_birth,
             date_admission=user_data.date_admission,
-            history=user_data.history
+            history=user_data.history,
         )
 
         return UserSchemaBase(**result)
@@ -80,7 +80,7 @@ def get_all(skip: int = 0, limit: int = 10) -> UserPaginationSchema:
             "total": total,
             "skip": skip,
             "limit": limit,
-            "data": [UserSchemaList(**u) for u in users]
+            "data": [UserSchemaList(**u) for u in users],
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erro ao listar usuários: {e}")
@@ -111,13 +111,19 @@ def update_user(user_id: int, user_data: UserSchemaUpdate) -> UserSchemaBase:
         # Sanitização condicional
         name = InputSanitizer.clean_text(user_data.name) if user_data.name else None
         email = InputSanitizer.clean_text(user_data.email) if user_data.email else None
-        password = InputSanitizer.clean_text(user_data.password) if user_data.password else None
+        password = (
+            InputSanitizer.clean_text(user_data.password)
+            if user_data.password
+            else None
+        )
         hashed_password = hash_senha_api(password) if password else None
 
         # Segurança mínima
         if email and not InputSanitizer.is_valid_email(email):
             raise HTTPException(status_code=400, detail="E-mail inválido.")
-        if any([name, email, password]) and not InputSanitizer.is_safe((name or '') + (email or '') + (password or '')):
+        if any([name, email, password]) and not InputSanitizer.is_safe(
+            (name or "") + (email or "") + (password or "")
+        ):
             raise HTTPException(status_code=400, detail="Dados maliciosos detectados.")
 
         success = UserModel.update(
@@ -134,7 +140,7 @@ def update_user(user_id: int, user_data: UserSchemaUpdate) -> UserSchemaBase:
             pis=user_data.pis,
             date_birth=user_data.date_birth,
             date_admission=user_data.date_admission,
-            history=user_data.history
+            history=user_data.history,
         )
 
         if not success:
@@ -155,7 +161,9 @@ def delete_user(user_id: int) -> bool:
     try:
         success = UserModel.delete(user_id)
         if not success:
-            raise HTTPException(status_code=404, detail="Usuário não encontrado para exclusão.")
+            raise HTTPException(
+                status_code=404, detail="Usuário não encontrado para exclusão."
+            )
         return True
     except KeyError as e:
         raise HTTPException(status_code=404, detail=str(e))

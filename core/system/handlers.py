@@ -4,7 +4,7 @@ from fastapi import Request
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
-from api.v1.packages.system.exceptions import BusinessRuleException
+from core.system.exceptions import BusinessRuleException
 
 def register_exception_handlers(app):
 

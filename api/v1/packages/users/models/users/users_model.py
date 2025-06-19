@@ -2,6 +2,7 @@ from core.database import get_connection
 from datetime import date
 from typing import Optional
 
+
 class UserModel:
     """
     Classe de acesso direto à tabela `users` no MySQL.
@@ -15,18 +16,23 @@ class UserModel:
         try:
             conn = get_connection()
             cur = conn.cursor()
-            cur.execute("""
+            cur.execute(
+                """
                 SELECT user_id, email, password, name
                 FROM users
                 WHERE email = %s
-            """, (email,))
+            """,
+                (email,),
+            )
             row = cur.fetchone()
             return dict(row) if row else None
         except Exception as e:
             raise RuntimeError(f"Erro ao buscar usuário por e-mail: {e}")
         finally:
-            if cur: cur.close()
-            if conn: conn.close()
+            if cur:
+                cur.close()
+            if conn:
+                conn.close()
 
     @staticmethod
     def get_by_id(user_id: int) -> dict | None:
@@ -35,18 +41,23 @@ class UserModel:
         try:
             conn = get_connection()
             cur = conn.cursor()
-            cur.execute("""
+            cur.execute(
+                """
                 SELECT *
                 FROM users
                 WHERE user_id = %s
-            """, (user_id,))
+            """,
+                (user_id,),
+            )
             row = cur.fetchone()
             return dict(row) if row else None
         except Exception as e:
             raise RuntimeError(f"Erro ao buscar usuário por ID: {e}")
         finally:
-            if cur: cur.close()
-            if conn: conn.close()
+            if cur:
+                cur.close()
+            if conn:
+                conn.close()
 
     @staticmethod
     def count_users() -> int:
@@ -60,8 +71,10 @@ class UserModel:
         except Exception as e:
             raise RuntimeError(f"Erro ao contar usuários: {e}")
         finally:
-            if cur: cur.close()
-            if conn: conn.close()
+            if cur:
+                cur.close()
+            if conn:
+                conn.close()
 
     @staticmethod
     def get_all(skip: int = 0, limit: int = 10) -> list[dict]:
@@ -70,18 +83,23 @@ class UserModel:
         try:
             conn = get_connection()
             cur = conn.cursor()
-            cur.execute("""
+            cur.execute(
+                """
                 SELECT *
                 FROM users
                 ORDER BY user_id
                 LIMIT %s OFFSET %s
-            """, (limit, skip))
+            """,
+                (limit, skip),
+            )
             return [dict(row) for row in cur.fetchall()]
         except Exception as e:
             raise RuntimeError(f"Erro ao listar usuários: {e}")
         finally:
-            if cur: cur.close()
-            if conn: conn.close()
+            if cur:
+                cur.close()
+            if conn:
+                conn.close()
 
     @staticmethod
     def create(
@@ -97,7 +115,7 @@ class UserModel:
         pis: Optional[str] = None,
         date_birth: Optional[date] = None,
         date_admission: Optional[date] = None,
-        history: Optional[str] = None
+        history: Optional[str] = None,
     ) -> dict:
         conn = None
         cur = None
@@ -110,7 +128,8 @@ class UserModel:
             if cur.fetchone():
                 raise ValueError("E-mail já cadastrado.")
 
-            cur.execute("""
+            cur.execute(
+                """
                 INSERT INTO users (
                     name, email, password, situation_id, permission_id,
                     nickname, office, ctps, ctps_serie, pis,
@@ -120,11 +139,23 @@ class UserModel:
                     %s, %s, %s, %s, %s,
                     %s, %s, %s
                 )
-            """, (
-                name, email, password, situation_id, permission_id,
-                nickname, office, ctps, ctps_serie, pis,
-                date_birth, date_admission, history
-            ))
+            """,
+                (
+                    name,
+                    email,
+                    password,
+                    situation_id,
+                    permission_id,
+                    nickname,
+                    office,
+                    ctps,
+                    ctps_serie,
+                    pis,
+                    date_birth,
+                    date_admission,
+                    history,
+                ),
+            )
 
             conn.commit()
             user_id = cur.lastrowid
@@ -136,15 +167,18 @@ class UserModel:
                 "nickname": nickname,
                 "office": office,
                 "date_birth": date_birth,
-                "date_admission": date_admission
+                "date_admission": date_admission,
             }
 
         except Exception as e:
-            if conn: conn.rollback()
+            if conn:
+                conn.rollback()
             raise RuntimeError(f"Erro ao criar usuário: {e}")
         finally:
-            if cur: cur.close()
-            if conn: conn.close()
+            if cur:
+                cur.close()
+            if conn:
+                conn.close()
 
     @staticmethod
     def update(
@@ -161,7 +195,7 @@ class UserModel:
         pis: Optional[str],
         date_birth: Optional[date],
         date_admission: Optional[date],
-        history: Optional[str]
+        history: Optional[str],
     ) -> bool:
         conn = None
         cur = None
@@ -190,13 +224,16 @@ class UserModel:
                 "pis": pis,
                 "date_birth": date_birth,
                 "date_admission": date_admission,
-                "history": history
+                "history": history,
             }
 
             for campo, valor in campos.items():
                 if valor is not None:
                     if campo == "email":
-                        cur.execute("SELECT 1 FROM users WHERE email = %s AND user_id != %s", (valor, user_id))
+                        cur.execute(
+                            "SELECT 1 FROM users WHERE email = %s AND user_id != %s",
+                            (valor, user_id),
+                        )
                         if cur.fetchone():
                             raise ValueError("E-mail já em uso por outro usuário.")
                     updates.append(f"{campo} = %s")
@@ -214,11 +251,14 @@ class UserModel:
         except (KeyError, ValueError) as e:
             raise e
         except Exception as e:
-            if conn: conn.rollback()
+            if conn:
+                conn.rollback()
             raise RuntimeError(f"Erro ao atualizar usuário: {e}")
         finally:
-            if cur: cur.close()
-            if conn: conn.close()
+            if cur:
+                cur.close()
+            if conn:
+                conn.close()
 
     @staticmethod
     def delete(user_id: int) -> bool:
@@ -236,8 +276,11 @@ class UserModel:
         except KeyError as e:
             raise e
         except Exception as e:
-            if conn: conn.rollback()
+            if conn:
+                conn.rollback()
             raise RuntimeError(f"Erro ao deletar usuário: {e}")
         finally:
-            if cur: cur.close()
-            if conn: conn.close()
+            if cur:
+                cur.close()
+            if conn:
+                conn.close()

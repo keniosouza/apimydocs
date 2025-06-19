@@ -18,7 +18,8 @@ class CompanyModel:
             conn = get_connection()
             cur = conn.cursor()
 
-            cur.execute("""
+            cur.execute(
+                """
                 SELECT company_id,
                        situation_id,
                        nickname,
@@ -48,7 +49,9 @@ class CompanyModel:
                        date_update
                 FROM companies
                 WHERE company_id = %s
-            """, (company_id,))
+            """,
+                (company_id,),
+            )
             row = cur.fetchone()
 
             if row:
@@ -57,8 +60,10 @@ class CompanyModel:
         except Exception as e:
             raise RuntimeError(f"Erro ao buscar empresa por ID: {e}")
         finally:
-            if cur: cur.close()
-            if conn: conn.close()
+            if cur:
+                cur.close()
+            if conn:
+                conn.close()
 
     @staticmethod
     def count_companies() -> int:
@@ -75,8 +80,10 @@ class CompanyModel:
         except Exception as e:
             raise RuntimeError(f"Erro ao contar empresas: {e}")
         finally:
-            if cur: cur.close()
-            if conn: conn.close()
+            if cur:
+                cur.close()
+            if conn:
+                conn.close()
 
     @staticmethod
     def get_all_companies(skip: int = 0, limit: int = 10) -> list[dict]:
@@ -89,7 +96,8 @@ class CompanyModel:
             conn = get_connection()
             cur = conn.cursor()
 
-            cur.execute("""
+            cur.execute(
+                """
                 SELECT company_id,
                        situation_id,
                        nickname,
@@ -120,11 +128,15 @@ class CompanyModel:
                 FROM companies
                 ORDER BY company_id
                 LIMIT %s OFFSET %s
-            """, (limit, skip))
+            """,
+                (limit, skip),
+            )
 
             return [dict(row) for row in cur.fetchall()]
         except Exception as e:
             raise RuntimeError(f"Erro ao listar empresas: {e}")
         finally:
-            if cur: cur.close()
-            if conn: conn.close()
+            if cur:
+                cur.close()
+            if conn:
+                conn.close()

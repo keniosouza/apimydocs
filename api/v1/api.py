@@ -9,11 +9,9 @@ from api.v1.packages.companies.endpoints import companies_endpoint
 api_router = APIRouter()
 
 # Inclui as rotas de "users" no roteador principal, com prefixo /users e tag 'Usuarios'
-api_router.include_router(
-    users_endpoint.router, prefix='/users', tags=['Usuários']
-)
+api_router.include_router(users_endpoint.router, prefix="/users", tags=["Usuários"])
 
 # Inclui as rotas de empresa
 api_router.include_router(
-    companies_endpoint.router, prefix='/companies', tags=['Empresas']
+    companies_endpoint.router, prefix="/companies", tags=["Empresas"]
 )

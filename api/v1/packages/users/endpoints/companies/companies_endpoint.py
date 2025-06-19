@@ -3,14 +3,14 @@ from fastapi import APIRouter, status, Depends, HTTPException, Query
 # Schemas para entrada e saída de dados
 from api.v1.packages.users.schemas.companies.companies_schema import (
     CompanySchemaBase,
-    CompanyPaginationSchema
+    CompanyPaginationSchema,
 )
 
 # Controller com as regras de negócio para companies
 from api.v1.packages.users.controllers.companies.companies_controller import (
     get_all_companies,
     get_company_by_id,
-    count_companies
+    count_companies,
 )
 
 # Middleware para obter o usuário autenticado via JWT
@@ -22,11 +22,12 @@ router = APIRouter()
 
 # ---------------------- ROTAS DE CONSULTA DE companies ----------------------
 
-@router.get('/', response_model=CompanyPaginationSchema)
+
+@router.get("/", response_model=CompanyPaginationSchema)
 def list_companies(
-    skip: int = Query(0, ge=0), 
+    skip: int = Query(0, ge=0),
     limit: int = Query(10, ge=1),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_user),
 ):
     """
     Lista todas as companies com paginação.
@@ -34,15 +35,12 @@ def list_companies(
     companies = get_all_companies(skip=skip, limit=limit)
     total = count_companies()
 
-    return {
-        "total": total,
-        "skip": skip,
-        "limit": limit,
-        "data": companies
-    }
+    return {"total": total, "skip": skip, "limit": limit, "data": companies}
 
 
-@router.get('/{company_id}', response_model=CompanySchemaBase, status_code=status.HTTP_200_OK)
+@router.get(
+    "/{company_id}", response_model=CompanySchemaBase, status_code=status.HTTP_200_OK
+)
 def get_company(company_id: int, current_user: dict = Depends(get_current_user)):
     """
     Retorna os dados detalhados de uma empresa específica pelo ID.
@@ -52,6 +50,5 @@ def get_company(company_id: int, current_user: dict = Depends(get_current_user))
         return company
 
     raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail="Empresa não encontrada."
+        status_code=status.HTTP_404_NOT_FOUND, detail="Empresa não encontrada."
     )

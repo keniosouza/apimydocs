@@ -2,28 +2,31 @@ from typing import Optional, List
 from pydantic import BaseModel, EmailStr
 from datetime import date
 
+
 # Representa os dados básicos de um usuário retornado pela API
 class UserSchemaBase(BaseModel):
-    user_id: Optional[int] = None             # ID único do usuário
-    name: Optional[str] = None                # Nome completo
-    email: Optional[EmailStr] = None          # E-mail (com validação de formato)
-    nickname: Optional[str] = None            # Nome de exibição (apelido)
-    office: Optional[str] = None              # Cargo ou função
-    date_birth: Optional[date] = None         # Data de nascimento
-    date_admission: Optional[date] = None     # Data de admissão
-    phone: Optional[str] = None               # Telefone (campo extra, caso utilizado)
+    user_id: Optional[int] = None  # ID único do usuário
+    name: Optional[str] = None  # Nome completo
+    email: Optional[EmailStr] = None  # E-mail (com validação de formato)
+    nickname: Optional[str] = None  # Nome de exibição (apelido)
+    office: Optional[str] = None  # Cargo ou função
+    date_birth: Optional[date] = None  # Data de nascimento
+    date_admission: Optional[date] = None  # Data de admissão
+    phone: Optional[str] = None  # Telefone (campo extra, caso utilizado)
 
     class Config:
-        from_attributes = True  # Permite criar o schema a partir de dicts (mesmo sem ORM)
+        from_attributes = (
+            True  # Permite criar o schema a partir de dicts (mesmo sem ORM)
+        )
 
 
 # Schema usado para criação de um novo usuário (campos obrigatórios)
 class UserSchemaCreate(BaseModel):
-    name: str                           # Nome completo obrigatório
-    email: EmailStr                     # E-mail obrigatório
-    password: str                       # Senha (será criptografada)
-    situation_id: int                   # Situação (ex: ativo, inativo)
-    permission_id: int                  # Permissão (perfil de acesso)
+    name: str  # Nome completo obrigatório
+    email: EmailStr  # E-mail obrigatório
+    password: str  # Senha (será criptografada)
+    situation_id: int  # Situação (ex: ativo, inativo)
+    permission_id: int  # Permissão (perfil de acesso)
     nickname: Optional[str] = None
     office: Optional[str] = None
     ctps: Optional[str] = None
@@ -77,7 +80,7 @@ class UserSchemaList(BaseModel):
 
 # Schema usado para paginação de usuários
 class UserPaginationSchema(BaseModel):
-    total: int                       # Total de registros
-    skip: int                        # Quantidade ignorada (offset)
-    limit: int                       # Quantidade por página (limit)
-    data: List[UserSchemaList]      # Lista paginada de usuários
+    total: int  # Total de registros
+    skip: int  # Quantidade ignorada (offset)
+    limit: int  # Quantidade por página (limit)
+    data: List[UserSchemaList]  # Lista paginada de usuários
