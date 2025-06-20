@@ -3,7 +3,6 @@
 import re
 import html
 
-
 class InputSanitizer:
 
     @staticmethod

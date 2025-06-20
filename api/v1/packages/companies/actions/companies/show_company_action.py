@@ -1,5 +1,5 @@
 # Importação de bibliotecas
-from api.v1.packages.companies.repositories.show_company import ShowCompany
+from api.v1.packages.companies.repositories.companies.show_company import ShowCompany
 from core.base.base_action import BaseAction
 
 """

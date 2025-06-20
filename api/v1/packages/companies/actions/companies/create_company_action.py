@@ -1,5 +1,5 @@
 # Importação de bibliotecas
-from api.v1.packages.companies.repositories.create_company import CreateCompany
+from api.v1.packages.companies.repositories.companies.create_company import CreateCompany
 from api.v1.packages.companies.schemas.companies_schema import CompanySchemaBase
 from core.base.base_action import BaseAction
 

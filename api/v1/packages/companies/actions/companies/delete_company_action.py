@@ -1,5 +1,5 @@
 # Importação de bibliotecas
-from api.v1.packages.companies.repositories.delete_company import DeleteCompany
+from api.v1.packages.companies.repositories.companies.delete_company import DeleteCompany
 from core.base.base_action import BaseAction
 
 

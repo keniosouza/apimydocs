@@ -1,5 +1,5 @@
 # Importação de bibliotecas
-from api.v1.packages.companies.repositories.index_companies import IndexCompanies
+from api.v1.packages.companies.repositories.companies.index_companies import IndexCompanies
 from core.base.base_action import BaseAction
 
 

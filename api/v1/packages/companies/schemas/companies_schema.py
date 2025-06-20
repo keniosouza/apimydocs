@@ -1,7 +1,12 @@
+import re
 from typing import Optional, List
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, field_validator
 from datetime import date, datetime
-
+from core.utils.text import Text
+from core.utils.phone import Phone
+from core.utils.cep import CEP
+from core.utils.cnpj import CNPJ
+from pydantic_core import PydanticCustomError
 
 # Schema base usado para representar uma empresa retornada pela API
 class CompanySchemaBase(BaseModel):
@@ -36,24 +41,67 @@ class CompanySchemaBase(BaseModel):
     class Config:
         from_attributes = True
 
+    @field_validator('cnpj')
+    @classmethod
+    def cnpj_validator(cls, data):
 
-# Schema usado para listagem de empresas (exibição resumida ou paginada)
-class CompanySchemaList(BaseModel):
-    company_id: int
-    name_fantasy: Optional[str]
-    name_business: Optional[str]
-    email: Optional[EmailStr]
-    telephone: Optional[str]
-    cellphone: Optional[str]
-    site: Optional[str]
+        # Obtem apenas os números
+        data = Text.just_numbers(data)
 
-    class Config:
-        from_attributes = True
+        # verifica se o cnpj é válido
+        if not CNPJ.validate(data):
+            # Retorna exceção reconhecida pelo FastApi
+            raise PydanticCustomError(
+                "cnpj_invalido",
+                "Numero de cnpj informado inválido",
+            )
 
+    @field_validator('cellphone')
+    @classmethod
+    def cellphone_validator(cls, data):
+        # Obtem apenas os numeros
+        data = Text.just_numbers(data)
 
-# Schema usado para paginação de resultados
-class CompanyPaginationSchema(BaseModel):
-    total: int  # Total de registros encontrados
-    skip: int  # Quantidade de registros ignorados (offset)
-    limit: int  # Quantidade por página (limit)
-    data: List[CompanySchemaList]  # Lista de empresas (parcial)
+        # Verifica se o número de telefone é valido
+        if not Phone.validate_cellphone(data):
+            # Retorna exceção reconhecida pelo FastApi
+            raise PydanticCustomError(
+                "cellphone_invalido",
+                "Número de celular inválido. Use o formato: (11) 98765-4321 ou +55 11 98765-4321.",
+            )
+
+        # Retorna informação formatada
+        return data
+
+    @field_validator('telephone')
+    @classmethod
+    def telephone_validator(cls, data):
+        # Obtem apenas os numeros
+        data = Text.just_numbers(data)
+
+        # Verifica se o número de telefone é valido
+        if not Phone.validate_telephone(data):
+
+            # Retorna exceção reconhecida pelo FastApi
+            raise PydanticCustomError(
+                "telefone_invalido",
+                "Número de telefone inválido. Use o formato: (11) 98765-4321 ou +55 11 98765-4321.",
+            )
+
+        # Retorna informação formatada
+        return data
+
+    @field_validator('cep')
+    @classmethod
+    def cep_validator(cls, data):
+        # Obtem apenas os números
+        data = Text.just_numbers(data)
+
+        # Verifica se o número de CEP é válido
+        if not CEP.validate(data):
+
+            # Retorna exceção reconhecida pelo FastApi
+            raise PydanticCustomError(
+                "cep_invalido",
+                "Numéro de cep inválido"
+            )
