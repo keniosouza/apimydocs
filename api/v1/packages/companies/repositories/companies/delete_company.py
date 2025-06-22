@@ -11,9 +11,7 @@ class DeleteCompany(BaseRepository):
     def execute(self, company_id: int):
         # Remove o registro desejado
         self.cursor.execute(
-            """DELETE
-                               FROM companies c
-                               where c.company_id = %s""",
+            """DELETE FROM companies c where c.company_id = %s""",
             (company_id,),
         )
 
